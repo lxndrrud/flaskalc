@@ -3,11 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from datetime import datetime
 import hashlib
+import os
 
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'sqlalchemy'
-app.secret_key = '12123124'
+app.secret_key = os.environ.get('SECRET_KEY', '12123124')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 db = SQLAlchemy(app)
 app.config['SESSION_SQLALCHEMY'] = db
@@ -105,14 +106,15 @@ def change_password():
     if session['is_authenticated']:
         if request.method == 'POST':
             old_password = hashlib.md5(request.form['old_password'].encode()).hexdigest()
-            user = User.query.filter_by(nickname=session['nickname'], \
-                password=old_password).first()
+            query = User.query.filter_by(nickname=session['nickname'], \
+                password=old_password)
+            user = query.first()
             if user is None:
                 flash('Wrong old password!')
                 return redirect(url_for('change_password'))
             if request.form['old_password'] != request.form['password']:
                 new_password = hashlib.md5(request.form['password'].encode()).hexdigest()
-                user.update({'password': new_password})
+                query.update({'password': new_password})
                 flash('Your password has been changed!')
                 return redirect(url_for('home'))
             flash('You entered your old password!')
@@ -182,7 +184,7 @@ def post_detail(post_id):
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', debug=True)
+    app.run('0.0.0.0')
 
     
     
