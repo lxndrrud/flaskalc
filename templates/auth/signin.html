@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock title %}block
+{% block content %}
+    <h2>Log In</h2>
+    <form action="{{ url_for('signin') }}" method="post">
+        {{ csrf_token }}
+        <div class="form-group">
+            <input class="form-control form-control-lg" type="text" placeholder="Nickname" name="nickname" required>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control form-control-lg"  placeholder="Password" name="password" required>
+        </div>
+        <p><input type="submit" value="Submit" class="btn btn-primary"></p>
+    </form>
+{% endblock content %}

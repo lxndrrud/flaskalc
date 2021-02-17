@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Send e-mail{% endblock title %}
+{% block content %}
+    <h2>Let`s send you a message!</h2>
+    <form action="{{ url_for('send_email') }}" method="POST">
+        {{ csrf_token }}
+        <div class="form-group">
+            <input class="form-control form-control-lg" type="email" placeholder="Your e-mail" name="email" required>
+        </div>
+        <p><input type="submit" value="Submit" class="btn btn-primary"></p>
+    </form>
+{% endblock content %}

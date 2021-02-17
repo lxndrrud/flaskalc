@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Post{% endblock title %}
+{% block content %}
+    <div class="post">
+        <h1 class="post-title">{{ post.title }}</h1>
+        <h4 class="post-text">{{ post.text }}</h4>
+        <h6 class="post-author"><p>by <a href="{{ url_for('user_posts', nickname=post.author_nickname) }}">{{ post.author_nickname }}</a></h6>
+        <h6 class="post-date">{{ post.datetime }}</h6>
+        
+        <div class="post-links">
+            {% if session.is_authenticated %}
+                {% if session.nickname == post.author_nickname %}
+                    <a href="{{ url_for('post_edit', post_id=post.id) }}" class="btn btn-primary">Edit</a>
+                {% endif %}
+                {% if session.nickname == post.author_nickname or session.role == 'Admin' %}
+                    <a href="{{ url_for('post_delete', post_id=post.id) }}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        
+    </div>
+{% endblock content %}
