@@ -10,41 +10,44 @@
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
-    <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-        </li>
-        {% if session.is_authenticated %}
+    <div class="wrapper">
+        <ul class="nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('user_posts', nickname=session.nickname) }}">Hi, {{ session.nickname }}!</a>
+                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('post_create') }}">Create post</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('change_password') }}">Change password</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
-            </li>
-        {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('signin') }}">Sign in</a>
-            </li>
-        {% endif %}
-    </ul>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-warning" role="alert">
-                    <div class="flashed-message">{{ message }}</div>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    <div class="content">{% block content %}{% endblock content %}</div>
+            {% if session.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('user_posts', nickname=session.nickname) }}">Hi, {{ session.nickname }}!</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('post_create') }}">Create post</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('change_password') }}">Change password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('signin') }}">Sign in</a>
+                </li>
+            {% endif %}
+        </ul>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">
+                        <div class="flashed-message">{{ message }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="content">{% block content %}{% endblock content %}</div>
+        <div class="footer">by <a href="https://github.com/lxndrrud">lxndrrud</a></div>
+    </div>
 </body>
 </html>

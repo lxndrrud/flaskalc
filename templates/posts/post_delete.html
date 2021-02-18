@@ -6,7 +6,7 @@
             color: blue;
         }
     </style>
-    <h2>Let`s delete!</h2>
+    <h2 class="page-title">Let`s delete!</h2>
     <form action="{{ url_for('post_delete', post_id=post.id) }}" method="post">
         <p>Are you sure you want to delete post entitled <span>&laquo;{{ post.title }}&raquo;</span>?</p>
         <input type="submit" value="Delete" class="btn btn-danger">

@@ -1,11 +1,31 @@
 {% extends 'base.html' %}
 {% block title %}Post{% endblock title %}
 {% block content %}
+    <style>
+        .card-header{
+            text-align: left;
+        }
+        .card-text{
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
     <div class="post">
         <h1 class="post-title">{{ post.title }}</h1>
-        <h4 class="post-text">{{ post.text }}</h4>
+        <h2 class="post-text">{{ post.text }}</h2>
         <h6 class="post-author"><p>by <a href="{{ url_for('user_posts', nickname=post.author_nickname) }}">{{ post.author_nickname }}</a></h6>
         <h6 class="post-date">{{ post.datetime }}</h6>
+        <h5>Likes: {{ likes }}</h5>
+        {% if session.is_authenticated %}
+            {% if is_liked %}
+                <div class="alert alert-info" role="alert">
+                    You liked it!
+                </div>
+                <a href="{{ url_for('unlike', post_id=post.id) }}" class="btn btn-danger">I don`t like it anymore!</a>
+            {% else %}
+                <a href="{{ url_for('like', post_id=post.id) }}" class="btn btn-primary">I like it!</a>
+            {% endif %}
+        {% endif %}
         
         <div class="post-links">
             {% if session.is_authenticated %}
@@ -17,6 +37,32 @@
                 {% endif %}
             {% endif %}
         </div>
+        <h4>Comments:</h4>
+        {% if session.is_authenticated %}
+            <h5>Comment this article!</h5>
+            <form action="{{ url_for('comment_create', post_id = post.id) }}" method="post">
+                {{ csrf_token }}
+                <div class="form-group">
+                    <input type="text" id="comment-text" name="comment-text" required placeholder="Text" class="form-control">
+                </div>
+                <p><input type="submit" value="Submit" class="btn btn-primary"></p>
+            </form>
+        {% endif %}
+        {% for comment in comments %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-header"><a href="{{ url_for('user_posts', nickname=comment.author_nickname) }}">{{ comment.author_nickname }}</a><p style="float: right;">{{ comment.datetime }}</p></div>
+                    <h4 class="card-text">{{ comment.text }}</h4>
+                    <div class="post-links">
+                        {% if session.is_authenticated %}
+                            {% if session.nickname == post.author_nickname or session.role == 'Admin' %}
+                                <a href="{{ url_for('comment_delete', post_id=post.id, comment_id=comment.id) }}" class="btn btn-danger">Delete</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
         
     </div>
 {% endblock content %}

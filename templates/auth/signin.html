@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Login{% endblock title %}block
 {% block content %}
-    <h2>Log In</h2>
+    <h2 class="page-title">Sign In</h2>
     <form action="{{ url_for('signin') }}" method="post">
         {{ csrf_token }}
         <div class="form-group">
@@ -10,6 +10,6 @@
         <div class="form-group">
             <input type="password" class="form-control form-control-lg"  placeholder="Password" name="password" required>
         </div>
-        <p><input type="submit" value="Submit" class="btn btn-primary"></p>
+        <p><button type="submit" class="btn btn-primary">Submit</button></p>
     </form>
 {% endblock content %}
