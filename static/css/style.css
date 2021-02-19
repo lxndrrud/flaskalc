@@ -42,13 +42,15 @@ a {
   vertical-align: bottom;
   text-align: center;
 }
-.card {
-  border-style: solid;
-  border-color: slategrey;
+.card{
+  border-radius: 10px;
+  border: none;
 }
 .card-body {
   text-align: center;
-  background-color: white;
+  border-style: solid;
+  border-radius: 10px;
+  border: 1px solid slategrey;
 }
 .post {
   margin-top: 30px;

@@ -15,6 +15,10 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('home') }}">Home</a>
             </li>
+            <li class="nav-item">
+                <a href="https://github.com/lxndrrud/flaskalc" class="nav-link">Source</a>
+            </li>
+            
             {% if session.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('user_posts', nickname=session.nickname) }}">Hi, {{ session.nickname }}!</a>
@@ -47,7 +51,9 @@
             {% endif %}
         {% endwith %}
         <div class="content">{% block content %}{% endblock content %}</div>
-        <div class="footer">by <a href="https://github.com/lxndrrud">lxndrrud</a></div>
+        <div class="footer">
+            <p>by <a href="https://github.com/lxndrrud">lxndrrud</a></p>
+        </div>
     </div>
 </body>
 </html>
