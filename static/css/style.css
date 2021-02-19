@@ -48,7 +48,6 @@ a {
 }
 .card-body {
   text-align: center;
-  border-style: solid;
   border-radius: 10px;
   border: 1px solid slategrey;
 }
