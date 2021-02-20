@@ -11,6 +11,7 @@ app.config['SESSION_TYPE'] = 'sqlalchemy'
 app.secret_key = os.environ.get('SECRET_KEY', '12123124')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 db = SQLAlchemy(app)
+db.create_all()
 app.config['SESSION_SQLALCHEMY'] = db
 session_ = Session(app)
 session_.app.session_interface.db.create_all()
