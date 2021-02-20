@@ -125,9 +125,8 @@ def signup():
         query = User.query.filter_by(nickname=request.form['nickname']).first()
         print(query)
         if query is None:
-            password = hashlib.md5(request.form['password'].encode()).hexdigest()
             role_name = 'User'
-            user = User(request.form['nickname'], request.form['name'], password, role_name)
+            user = User(request.form['nickname'], request.form['name'], request.form['password'], role_name)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('signin'))
