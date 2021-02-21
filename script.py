@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, session, request, redirect, f
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from datetime import datetime
-import hashlib
+import bcrypt
 import os
 
 
@@ -61,7 +61,7 @@ class User(db.Model):
     def __init__(self, nickname, name, password, role_name):
         self.nickname = nickname
         self.name = name
-        self.password = hashlib.md5(password.encode()).hexdigest()
+        self.password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
         self.role_name = role_name
 
     def __repr__(self):
@@ -108,9 +108,8 @@ def home():
 @app.route('/users/signin', methods=['GET', 'POST'])
 def signin():
     if request.method == "POST":
-        password = hashlib.md5(request.form['password'].encode()).hexdigest()
-        user = User.query.filter_by(nickname=request.form['nickname'], password=password).first()
-        if user is not None:
+        user = User.query.filter_by(nickname=request.form['nickname']).first()
+        if user is not None and bcrypt.checkpw(request.form['password'].encode(), user.password):
             session['nickname'] = user.nickname
             session['role'] = user.role_name
             session['is_authenticated'] = True
@@ -123,7 +122,6 @@ def signin():
 def signup():
     if request.method == "POST":
         query = User.query.filter_by(nickname=request.form['nickname']).first()
-        print(query)
         if query is None:
             role_name = 'User'
             user = User(request.form['nickname'], request.form['name'], request.form['password'], role_name)
@@ -137,15 +135,13 @@ def signup():
 def change_password():
     if session['is_authenticated']:
         if request.method == 'POST':
-            old_password = hashlib.md5(request.form['old_password'].encode()).hexdigest()
-            query = User.query.filter_by(nickname=session['nickname'], \
-                password=old_password)
+            query = User.query.filter_by(nickname=session['nickname'])
             user = query.first()
-            if user is None:
+            if user is None or not bcrypt.checkpw(request.form['old_password'].encode(), user.password):
                 flash('Wrong old password!')
                 return redirect(url_for('change_password'))
             if request.form['old_password'] != request.form['password']:
-                new_password = hashlib.md5(request.form['password'].encode()).hexdigest()
+                new_password = bcrypt.hashpw(request.form['password'].encode(), bcrypt.gensalt())
                 query.update({'password': new_password})
                 flash('Your password has been changed!')
                 return redirect(url_for('home'))
@@ -260,7 +256,7 @@ def comment_delete(post_id, comment_id):
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0')
+    app.run('0.0.0.0', debug=True)
 
     
     
