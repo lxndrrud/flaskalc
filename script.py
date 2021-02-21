@@ -145,7 +145,7 @@ def change_password():
                 query.update({'password': new_password})
                 flash('Your password has been changed!')
                 return redirect(url_for('home'))
-            flash('You entered your old password!')
+            flash('You`ve entered your old password!')
             return redirect(url_for('change_password'))
         return render_template('auth/change_password.html')
     flash('You must authorize!')
