@@ -1,4 +1,4 @@
-# flaskalc
+# Flask web app with SQLAlchemy ORM
 
 My pet blog project.
 
